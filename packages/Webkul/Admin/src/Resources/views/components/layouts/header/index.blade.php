@@ -6,11 +6,7 @@
         
         <a href="{{ route('admin.dashboard.index') }}">
             @if ($logo = core()->getConfigData('general.general.admin_logo.logo_image'))
-                <img
-                    class="h-10"
-                    src="{{ Storage::url($logo) }}"
-                    alt="{{ config('app.name') }}"
-                />
+                <img class="h-10" src="{{ asset('storage/' . $logo) }}" alt="{{ config('app.name') }}">
             @else
                 <img
                     class="h-10 max-sm:hidden"

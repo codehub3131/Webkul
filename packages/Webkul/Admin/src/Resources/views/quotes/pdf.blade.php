@@ -160,13 +160,28 @@
     </head>
 
     <body dir="{{ $locale }}">
+        @if(isset($logoUrl))
+            <div style="
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                opacity: 0.1;        
+                z-index: 0;
+                width: 60%;
+                text-align: center;
+            ">
+                <img src="file://{{ $logoUrl }}" style="width: 100%; height: auto;" />
+            </div>
+        @endif
+
         <div class="page">
             <!-- Header -->
             <div class="page-header">
                 <b>@lang('admin::app.quotes.index.pdf.title')</b>
             </div>
 
-            <div class="page-content">
+            <div class="page-content" style="position: relative; z-index: 1;">
                 <!-- Invoice Information -->
                 <table class="{{ app()->getLocale   () }}">
                     <tbody>
@@ -349,12 +364,25 @@
                                         {{ $item->name }}
                                     </td>
 
-                                    <td>{!! core()->formatBasePrice($item->price, true) !!}</td>
+                                    {{-- <td>{!! core()->formatBasePrice($item->price, true) !!}</td> --}}
+                                    <td>
+                                        @if ($item->discount_amount > 0)
+                                            <span style="text-decoration: line-through;">
+                                                {!! core()->formatBasePrice($item->price + $item->discount_amount / $item->quantity, true) !!}
+                                            </span>
+                                            <br>
+                                            <span>{!! core()->formatBasePrice($item->price, true) !!}</span>
+                                        @else
+                                            {!! core()->formatBasePrice($item->price, true) !!}
+                                        @endif
+                                    </td>
+
 
                                     <td class="text-center">{{ $item->quantity }}</td>
 
                                     <td class="text-center">{!! core()->formatBasePrice($item->total, true) !!}</td>
 
+                                    {{-- <td class="text-center">{!! core()->formatBasePrice($item->discount_amount, true) !!}</td> --}}
                                     <td class="text-center">{!! core()->formatBasePrice($item->discount_amount, true) !!}</td>
 
                                     <td class="text-center">{!! core()->formatBasePrice($item->tax_amount, true) !!}</td>

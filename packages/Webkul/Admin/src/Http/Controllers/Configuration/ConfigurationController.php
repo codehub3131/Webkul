@@ -42,7 +42,17 @@ class ConfigurationController extends Controller
     {
         Event::dispatch('core.configuration.save.before');
 
-        $this->configurationRepository->create($request->all());
+        $data = $request->all();
+
+        
+        if ($request->hasFile('admin_logo')) {
+            $file = $request->file('admin_logo');
+           
+            $path = $file->store('images/configuration', 'public');
+            $data['admin_logo'] = $path;  
+        }
+
+        $this->configurationRepository->create($data);
 
         Event::dispatch('core.configuration.save.after');
 
@@ -50,6 +60,7 @@ class ConfigurationController extends Controller
 
         return redirect()->back();
     }
+
 
     /**
      * download the file for the specified resource.

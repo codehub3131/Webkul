@@ -22,3 +22,4 @@ Route::controller(QuoteController::class)->prefix('quotes')->group(function () {
 
     Route::post('mass-destroy', 'massDestroy')->name('admin.quotes.mass_delete');
 });
+   

@@ -189,10 +189,17 @@ class QuoteController extends Controller
     public function print($id): Response|StreamedResponse
     {
         $quote = $this->quoteRepository->findOrFail($id);
+        $quote->load('items');  
+
+        $logo = core()->getConfigData('general.general.admin_logo.logo_image');
+        $logoUrl = $logo ? public_path('storage/' . $logo) : null;
 
         return $this->downloadPDF(
-            view('admin::quotes.pdf', compact('quote'))->render(),
+            view('admin::quotes.pdf', compact('quote', 'logoUrl'))->render(),
             'Quote_'.$quote->subject.'_'.$quote->created_at->format('d-m-Y')
         );
     }
+
+     
+
 }
